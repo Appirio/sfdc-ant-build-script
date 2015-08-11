@@ -1,2 +1,46 @@
 # sfdc-ant-build-script
 Build script for Salesforce projects
+
+### Prerequisites
+
+1. Install [Java, ant, and the Force.com Migration Tool (ant-salesforce.jar)]( https://resources.docs.salesforce.com/sfdc/pdf/salesforce_migration_guide.pdf)
+
+2. Copy ```./build-sample.properties``` to ```../../build.properties``` (two directories up)
+
+3. Update ```../../build.properties``` with your own usernames and passwords
+
+### Commands
+
+See the build.xml for the definitive list of commands.  Typical syntax is:
+
+ ```
+ ant dev2qa -Dversion=1.0
+ ```
+
+This will command will:
+- retrieve the Salesforce metadata from the dev environment based upon ```package-1.0.xml```
+- store this metadata in a local folder called  ```dev sprint 1.0```
+- copy ```destructiveChanges-1.0.xml``` (if it exists) to ```dev sprint 1.0/destructiveChanges.xml```
+- deploy this metadata to the qa environment
+
+Our environment flow looks like:
+
+![Environment Flow](https://lh3.googleusercontent.com/ZZWBA5H_HKMV3k9S3A-PLlQdltidKTs517FGjRihbSUmt6TkaLjI3qAb826gGmNaxsD5UCMJ7hvzBOo=w1380-h802)
+
+Often used commands are:
+
+ ```
+
+ant local2dev -Dversion=1.0 -Dsource=dev
+ant local2itdev -Dversion=1.0 -Dsource=dev
+ant dev2full -Dversion=1.0
+ant qa2full -Dversion=1.0
+ant itdev2full -Dversion=1.0
+ant full2prod -Dversion=1.0
+ ```
+
+Optional parameters exist for checkOnly and/or runAllTests (which default to false).  For example:
+
+ ```
+ ant dev2qa -Dversion=3.6 -DcheckOnly=true -DrunAllTests=true
+ ```
