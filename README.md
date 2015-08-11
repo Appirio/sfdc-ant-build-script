@@ -25,7 +25,7 @@ This will command will:
 
 Our environment flow looks like:
 
-![Environment Flow](https://lh3.googleusercontent.com/ZZWBA5H_HKMV3k9S3A-PLlQdltidKTs517FGjRihbSUmt6TkaLjI3qAb826gGmNaxsD5UCMJ7hvzBOo=w1380-h802)
+![Environment Flow](http://drive.google.com/uc?export=view&id=0Bz-xKipcMk3xZ2xjMXE3Ykh6Q2M)
 
 Often used commands are:
 
