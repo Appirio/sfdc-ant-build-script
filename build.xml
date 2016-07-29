@@ -1,7 +1,6 @@
-<project name="SFDC Deployments" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+<project name="SFDC Deployment" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
 
-  <!-- Place build.properties file two directories up from current location, -->
-  <!-- enabling you to work in a shared folder with subfolders for each deployment -->
+  <!-- Place build.properties file two directories up from current location -->
   <property file="../../build.properties" />
   <property environment="env" />
 
@@ -62,6 +61,20 @@
     </antcall>
   </target>
 
+  <!-- SYNTAX: ant itdev2full-specified-tests -Dversion=3.6 -DspecifiedTests=PresalesRequestHandler_Test    optional: -DcheckOnly=true -DrunAllTests=true-->
+  <target name="itdev2full-specified-tests">
+    <antcall target="itdev2local">
+      <param name="source" value="dev" />
+      <param name="version" value="${version}" />
+    </antcall>
+    <antcall target="local2full-specified-tests">
+      <param name="source" value="dev" />
+      <param name="version" value="${version}" />
+      <param name="checkOnly" value="${checkOnly}" />
+      <param name="specifiedTests" value="${specifiedTests}" />
+    </antcall>
+  </target>
+
   <!-- SYNTAX: ant dev2qa -Dversion=3.6    optional: -DcheckOnly=true -DrunAllTests=true-->
   <target name="dev2qa">
     <antcall target="dev2local">
@@ -104,6 +117,19 @@
     </antcall>
   </target>
 
+  <!-- SYNTAX: ant full2prod-specified-tests -Dversion=3.6 -DspecifiedTests=PresalesRequestHandler_Test   optional: -DcheckOnly=true -DrunAllTests=true-->
+  <target name="full2prod-specified-tests">
+    <antcall target="full2local">
+      <param name="source" value="full" />
+      <param name="version" value="${version}" />
+    </antcall>
+    <antcall target="local2prod-specified-tests">
+      <param name="source" value="full" />
+      <param name="version" value="${version}" />
+      <param name="checkOnly" value="${checkOnly}" />
+      <param name="specifiedTests" value="${specifiedTests}" />
+    </antcall>
+  </target>
 
   <!-- SYNTAX: ant prodfix2prod -Dversion=3.6    optional: -DcheckOnly=true -DrunAllTests=true-->
   <target name="prodfix2prod">
@@ -182,6 +208,25 @@
       runAllTests="${runAllTests}"
       deployRoot="${source} sprint ${version}"
     />
+  </target>
+
+  <!-- SYNTAX: ant local2full-specified-tests -Dversion=3.6 -Dsource=dev    -DspecifiedTests=PresalesRequestHandler_Test  optional: -DcheckOnly=true -DrunAllTests=true -->
+  <target name="local2full-specified-tests">
+    <antcall target="copy-destructiveChanges">
+      <param name="version" value="${version}" />
+      <param name="source" value="${source}" />
+    </antcall>
+    <sf:deploy
+      username="${cmc.full.username}"
+      password="${cmc.full.password}"
+      serverurl="${sandbox.serverurl}"
+      pollWaitMillis="20000"
+      maxPoll="5000"
+      checkOnly="${checkOnly}"
+      testLevel="RunSpecifiedTests"
+      deployRoot="${source} sprint ${version}">
+      <runTest>${specifiedTest}</runTest> <!--PresalesRequestHandler_Test-->
+    </sf:deploy>
   </target>
 
   <!-- qa2prod commands ****************** -->
@@ -266,6 +311,35 @@
       deployRoot="${source} sprint ${version}" />
   </target>
 
+
+  <!-- SYNTAX: ant local2prod-specified-tests -Dversion=3.6 -Dsource=qa -DspecifiedTests=PresalesRequestHandler_Test   optional: -DcheckOnly=true -DrunAllTests=true -->
+  <target name="local2prod-specified-tests">
+    <!-- backup prod first -->
+    <antcall target="backup-prod">
+      <param name="version" value="${version}" />
+      <param name="type" value="package" />
+    </antcall>
+    <antcall target="backup-prod">
+      <param name="version" value="${version}" />
+      <param name="type" value="destructiveChanges" />
+    </antcall>
+    <antcall target="copy-destructiveChanges">
+      <param name="version" value="${version}" />
+      <param name="source" value="${source}" />
+    </antcall>
+    <sf:deploy
+      username="${cmc.prod.username}"
+      password="${cmc.prod.password}"
+      serverurl="${prod.serverurl}"
+      pollWaitMillis="20000"
+      maxPoll="5000"
+      checkOnly="${checkOnly}"
+      testLevel="RunSpecifiedTests"
+      deployRoot="${source} sprint ${version}">
+      <runTest>${specifiedTest}</runTest>  <!-- PresalesRequestHandler_Test -->
+    </sf:deploy>
+  </target>
+
   <!-- prodfix2prod commands ****************** -->
 
   <!-- SYNTAX: ant prodfix2local -Dversion=3.8 -Dsource=prodfix-->
@@ -307,24 +381,6 @@
     <sf:deploy
       username="${cmc.dev.username}"
       password="${cmc.dev.password}"
-      serverurl="${sandbox.serverurl}"
-      pollWaitMillis="20000"
-      maxPoll="5000"
-      checkOnly="${checkOnly}"
-      runAllTests="${runAllTests}"
-      deployRoot="${source} sprint ${version}"
-    />
-  </target>
-
-  <!-- SYNTAX: ant local2itdev -Dversion=3.6 -Dsource=full    optional: -DcheckOnly=true -DrunAllTests=true -->
-  <target name="local2itdev">
-    <antcall target="copy-destructiveChanges">
-      <param name="version" value="${version}" />
-      <param name="source" value="${source}" />
-    </antcall>
-    <sf:deploy
-      username="${it.dev.username}"
-      password="${it.dev.password}"
       serverurl="${sandbox.serverurl}"
       pollWaitMillis="20000"
       maxPoll="5000"
