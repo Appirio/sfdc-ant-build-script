@@ -1,6 +1,7 @@
 <project name="SFDC Deployment" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
 
   <!-- Place build.properties file two directories up from current location -->
+  <!-- enabling you to work in a shared folder with subfolders for each deployment -->
   <property file="../../build.properties" />
   <property environment="env" />
 
