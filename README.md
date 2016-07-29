@@ -36,7 +36,9 @@ ant local2itdev -Dversion=1.0 -Dsource=dev
 ant dev2full -Dversion=1.0
 ant qa2full -Dversion=1.0
 ant itdev2full -Dversion=1.0
+ant itdev2full-specified-tests -Dversion=1.0 -DspecifiedTests=TestClassName
 ant full2prod -Dversion=1.0
+ant full2prod-specified-tests -Dversion=1.0 -DspecifiedTests=TestClassName
  ```
 
 Optional parameters exist for checkOnly and/or runAllTests (which default to false).  For example:
