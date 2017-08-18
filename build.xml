@@ -20,15 +20,15 @@
     </target>
 -->
 
-  <scriptdef name="scepcificTest" language="javascript">
-    <attribute name="cmcuser"/>
-    <attribute name="cmcpass"/>
+  <scriptdef name="runSpecifiedTests" language="javascript">
+    <attribute name="username"/>
+    <attribute name="password"/>
     <attribute name="serverurl"/>
     <![CDATA[
-    	//*** CREATE DEPLOY TASK ****
+    		//*** CREATE DEPLOY TASK ****
 		var deployTask = project.createTask('antlib:com.salesforce:deploy');
-		var username = attributes.get("cmcuser");
-		var password = attributes.get("cmcpass");
+		var username = attributes.get("username");
+		var password = attributes.get("password");
 		var serverurl = attributes.get("serverurl");
 		var source = project.getProperty("source");
 		var version = project.getProperty("version");
@@ -37,24 +37,24 @@
 		if(username!=null && password!=null && serverurl!=null && source!=null && version!=null && specifiedTest!=null){
 			deployTask.setUsername(username);
 			deployTask.setPassword(password);
-    	    deployTask.setServerURL(serverurl);
-    	    deployTask.setDeployRoot(source + " sprint " + version);
-    	    deployTask.setTestLevel("RunSpecifiedTests");
-    	    deployTask.setMaxPoll("5000");
-    	  	deployTask.setPollWaitMillis("20000");
+    	    		deployTask.setServerURL(serverurl);
+    	    		deployTask.setDeployRoot(source + " sprint " + version);
+    	    		deployTask.setTestLevel("RunSpecifiedTests");
+    	    		deployTask.setMaxPoll("5000");
+    	  		deployTask.setPollWaitMillis("20000");
 			
-    		//*** Configure checkOnly ***
-    		if (project.getProperty("checkOnly")=="true"){
-    	  		deployTask.setCheckonly(true);
-    		}
-    		else{
-    	  		deployTask.setCheckonly(false);
-    		}
+    			//*** Configure checkOnly ***
+    			if (project.getProperty("checkOnly")=="true"){
+    	  			deployTask.setCheckonly(true);
+    			}
+    			else{
+    	  			deployTask.setCheckonly(false);
+    			}
 			
-    		//*** Prepare list of test classes ***
-    		if (specifiedTest) {
-    			deployTask.setTestLevel('RunSpecifiedTests');
-    			var tests = specifiedTest.split(',');
+    			//*** Prepare list of test classes ***
+    			if (specifiedTest) {
+    				deployTask.setTestLevel('RunSpecifiedTests');
+    				var tests = specifiedTest.split(',');
 				
   				//*** Prepare runTest tags ****
   				var runTest = deployTask.getClass().getClassLoader().loadClass("com.salesforce.ant.DeployTask$CodeNameElement");
@@ -64,10 +64,10 @@
   					deployTask.addRunTest(rt);
   				}
 			}
-    		//*** Execute deploy task ***
-    		deployTask.execute();
+    			//*** Execute deploy task ***
+    			deployTask.execute();
 		}
-    	//**** DONE *****************
+    		//**** DONE *****************
 	]]>
   </scriptdef>
 
@@ -281,7 +281,7 @@
         <param name="source" value="${source}" />
       </antcall>
   	<!-- deploy script -->
-  	<scepcificTest cmcuser="${cmc.full.username}" cmcpass="${cmc.full.password}" serverurl="${sandbox.serverurl}"/>
+  	<runSpecifiedTests username="${cmc.full.username}" password="${cmc.full.password}" serverurl="${sandbox.serverurl}"/>
   </target>
   
 
@@ -340,7 +340,7 @@
       <param name="source" value="${source}" />
     </antcall>
 	<!-- deploy script -->
-	<scepcificTest cmcuser="${cmc.full.username}" cmcpass="${cmc.full.password}" serverurl="${sandbox.serverurl}"/>
+	<runSpecifiedTests username="${cmc.full.username}" password="${cmc.full.password}" serverurl="${sandbox.serverurl}"/>
 </target>
 
   <!-- qa2prod commands ****************** -->
@@ -441,7 +441,7 @@
         <param name="source" value="${source}" />
       </antcall>
   	<!-- deploy script -->
-  	<scepcificTest cmcuser="${cmc.prod.username}" cmcpass="${cmc.prod.password}" serverurl="${prod.serverurl}"/>
+  	<runSpecifiedTests username="${cmc.prod.username}" password="${cmc.prod.password}" serverurl="${prod.serverurl}"/>
   </target>
 
   <!-- prodfix2prod commands ****************** -->
@@ -531,7 +531,7 @@
        <param name="source" value="${source}" />
      </antcall>
      <!-- deploy script -->
-	 <scepcificTest cmcuser="${cmc.dev.username}" cmcpass="${cmc.dev.password}" serverurl="${sandbox.serverurl}"/>
+	 <runSpecifiedTests username="${cmc.dev.username}" password="${cmc.dev.password}" serverurl="${sandbox.serverurl}"/>
   </target>
 
   <!-- SYNTAX: ant local2prodfix -Dfolder=XXXXXXXXX    optional: -DcheckOnly=true -DrunAllTests=true -->
