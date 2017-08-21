@@ -46,3 +46,7 @@ Optional parameters exist for checkOnly and/or runAllTests (which default to fal
  ```
  ant dev2qa -Dversion=3.6 -DcheckOnly=true -DrunAllTests=true
  ```
+
+
+### Notes
+1. Tested and working fine with latest ant version 1.10.1 (https://ant.apache.org/bindownload.cgi)
