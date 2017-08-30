@@ -1,16 +1,13 @@
 # sfdc-ant-build-script
 Build script for Salesforce projects
 
-### Version Notes
-1. Ant version greater than 1.6, tested with 1.10.1 (latest version).
-
 ### Prerequisites
+1. Ant version greater than 1.6, tested with 1.10.1 (latest version).
+2. Install [Java, ant, and the Force.com Migration Tool (ant-salesforce.jar)]( https://resources.docs.salesforce.com/sfdc/pdf/salesforce_migration_guide.pdf)
 
-1. Install [Java, ant, and the Force.com Migration Tool (ant-salesforce.jar)]( https://resources.docs.salesforce.com/sfdc/pdf/salesforce_migration_guide.pdf)
+3. Copy ```./build-sample.properties``` to ```../../build.properties``` (two directories up)
 
-2. Copy ```./build-sample.properties``` to ```../../build.properties``` (two directories up)
-
-3. Update ```../../build.properties``` with your own usernames and passwords
+4. Update ```../../build.properties``` with your own usernames and passwords
 
 ### Commands
 
